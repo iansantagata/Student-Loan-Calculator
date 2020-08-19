@@ -8,6 +8,7 @@ Library/
 Visual Studio / MonoDevelop generated
 =====================================
 ExportedObj/
+bin/
 obj/
 .vs/
 *.svd
