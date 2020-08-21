@@ -1,10 +1,9 @@
 ﻿using StudentLoanCalculator.Enums;
 using System;
-using System.Threading;
 
 namespace StudentLoanCalculator.Views
 {
-    public class UserInteraction
+    public class ProgramUserInteraction
     {
         public void GreetUser()
         {

@@ -8,7 +8,7 @@ namespace StudentLoanCalculator
     {
         public static void Main(string[] args)
         {
-            var userInteraction = new UserInteraction();
+            var userInteraction = new ProgramUserInteraction();
             userInteraction.GreetUser();
 
             var calculatorFactory = new CalculatorFactory();
