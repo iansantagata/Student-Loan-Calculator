@@ -69,7 +69,14 @@ namespace StudentLoanCalculator.Calculators
                 P = principalAfterOneYear;
             }
 
-            _userInteraction.ReportNumberOfYearsToFullyPayLoan(yearCount);
+            if (!isDiverging)
+            {
+                _userInteraction.ReportNumberOfYearsToFullyPayLoan(yearCount);
+            }
+            else
+            {
+                _userInteraction.ReportLoanWillNeverFullyBePaidOff();
+            }
         }
 
         private int GetNumberOfTimesPerYearFromFrequency(LoanTimeInterval frequency)

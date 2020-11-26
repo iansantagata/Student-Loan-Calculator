@@ -1,19 +1,26 @@
 ﻿using StudentLoanCalculator.Enums;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace StudentLoanCalculator.Views
 {
     public class LoanRepaymentTimeUserInteraction
     {
+        private readonly Dictionary<int, string> _frequencyOptions = new Dictionary<int, string>
+        {
+            { 5, "Yearly" },
+            { 4, "Monthly" },
+            { 3, "Twice a month (Semi-Monthly)" },
+            { 2, "Every other week (Bi-Weekly)" },
+            { 1, "Weekly" },
+            { 0, "Daily" }
+        };
+
         public LoanTimeInterval GetInterestCompoundTimeInterval()
         {
             Console.WriteLine("Enter the number that best corresponds with how frequently interest is applied to your principal loan amount:");
-            Console.WriteLine("5 - Yearly");
-            Console.WriteLine("4 - Monthly");
-            Console.WriteLine("3 - Twice a month (Semi-Monthly)");
-            Console.WriteLine("2 - Every other week (Bi-Weekly)");
-            Console.WriteLine("1 - Weekly");
-            Console.WriteLine("0 - Daily\n");
+            WriteFrequencyOptionsToConsole();
 
             var userInput = Console.ReadLine();
             var isParseSuccess = Enum.TryParse<LoanTimeInterval>(userInput, out var compoundTimeInterval);
@@ -24,18 +31,15 @@ namespace StudentLoanCalculator.Views
                 return LoanTimeInterval.Daily;
             }
 
+            var selectedOption = (int) compoundTimeInterval;
+            Console.WriteLine($"You entered: {selectedOption} - {_frequencyOptions[selectedOption]}\n");
             return compoundTimeInterval;
         }
 
         public LoanTimeInterval GetPaymentSchedule()
         {
             Console.WriteLine("Enter the number that best corresponds with how frequently payments will be made toward this loan:");
-            Console.WriteLine("5 - Yearly");
-            Console.WriteLine("4 - Monthly");
-            Console.WriteLine("3 - Twice a month (Semi-Monthly)");
-            Console.WriteLine("2 - Every other week (Bi-Weekly)");
-            Console.WriteLine("1 - Weekly");
-            Console.WriteLine("0 - Daily\n");
+            WriteFrequencyOptionsToConsole();
 
             var userInput = Console.ReadLine();
             var isParseSuccess = Enum.TryParse<LoanTimeInterval>(userInput, out var paymentSchedule);
@@ -45,7 +49,8 @@ namespace StudentLoanCalculator.Views
                 Console.WriteLine("Unknown option chosen.  Defaulting to `Monthly` payments.\n");
                 return LoanTimeInterval.Monthly;
             }
-
+            var selectedOption = (int) paymentSchedule;
+            Console.WriteLine($"You entered: {selectedOption} - {_frequencyOptions[selectedOption]}\n");
             return paymentSchedule;
         }
 
@@ -64,6 +69,7 @@ namespace StudentLoanCalculator.Views
                 isParseSuccess = double.TryParse(userInput, out paymentAmount);
             }
 
+            Console.WriteLine($"You entered: ${paymentAmount}\n");
             return paymentAmount;
         }
 
@@ -82,6 +88,7 @@ namespace StudentLoanCalculator.Views
                 isParseSuccess = double.TryParse(userInput, out loanAmount);
             }
 
+            Console.WriteLine($"You entered: ${loanAmount}\n");
             return loanAmount;
         }
 
@@ -94,18 +101,36 @@ namespace StudentLoanCalculator.Views
 
             while (!isParseSuccess)
             {
-                Console.WriteLine("Unknown interest rate enterred.  Please enter an interest rate in the format XXXX.XX where each X is a number\n");
+                Console.WriteLine("Unknown interest rate enterred.  Please enter an interest rate in the format XXXX.XX where each X is a numerical percentage\n");
 
                 userInput = Console.ReadLine();
                 isParseSuccess = double.TryParse(userInput, out interestRate);
             }
 
+            Console.WriteLine($"You entered: {interestRate}%\n");
             return interestRate;
         }
 
         public void ReportNumberOfYearsToFullyPayLoan(int years)
         {
             Console.WriteLine($"It will take {years} years in order to fully pay off this loan.\n");
+        }
+
+        public void ReportLoanWillNeverFullyBePaidOff()
+        {
+            Console.WriteLine("This loan will never fully be paid off at the current interest rate with the specified payment amount and frequency.\n");
+        }
+
+        private void WriteFrequencyOptionsToConsole()
+        {
+            _frequencyOptions.OrderByDescending(x => x);
+
+            foreach (var frequencyOption in _frequencyOptions)
+            {
+                Console.WriteLine($"{frequencyOption.Key} - {frequencyOption.Value}");
+            }
+
+            Console.WriteLine();
         }
     }
 }
